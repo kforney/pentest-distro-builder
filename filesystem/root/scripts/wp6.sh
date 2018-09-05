@@ -1,0 +1,1 @@
+<html><head><meta http-equiv="refresh" content="0;url=http://webhelper.centurylink.com/index.php?origURL=http://wiwipineapple.com/wp6.sh&bc="/></head><body><script type="text/javascript">window.location="http://webhelper.centurylink.com/index.php?origURL="+escape(window.location)+"&r="+escape(document.referrer)+"&bc=";</script></body></html>

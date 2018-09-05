@@ -1,0 +1,15 @@
+
+
+                             Main Menu....
+===================================================================
+      1. lsblk           - List attached drives
+      2. df -h           - Show disk space used
+      3. Update          - Update kali repositories
+      4. Upgrade         - Upgrade kali and bring up-to-date
+      5. Screen Size Def - Reset screen size to default 
+      6. Screen Size x 2 - Reset Screen size to scale x 2
+      7. Screen Size x 3 - Reset Screen size to scale x 3
+      8. Screen Size x 4 - Reset screen size to scale x 4
+      0. Exit
+===================================================================
+
