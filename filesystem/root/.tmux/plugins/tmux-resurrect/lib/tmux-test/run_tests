@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+# This file is a symlink from 'tmux-test' plugin.
+# You probably don't want to edit it.
+
+# Invoke this script when running a test suite.
+# Example invocations:
+#   ./run_tests                # runs tests on default VM ubuntu
+#   ./run_tests ubuntu         # runs tests on ubuntu VM
+#   ./run_tests ubuntu centos  # runs tests on ubuntu and cents VMs
+
+# For each virtual machine where tests run, this script performs the following:
+# - starts VM
+# - starts the test suite witin a VM
+# - stops the VM after the test suite is done
+
+export BOXES="$*"
+
+# global variable for script exit value
+export EXIT_VALUE=0
+
+register_failing_tests() {
+	EXIT_VALUE=1
+}
+
+run_vagrant() {
+	local box="$1"
+	VAGRANT_CWD=lib/tmux-test/ vagrant up "$box"
+}
+
+# Halt vagrant after tests are done running, unless KEEP_RUNNING environment
+# variable is set to 'true'.
+stop_vagrant() {
+	local box="$1"
+	if [ -z "$KEEP_RUNNING" ]; then
+		VAGRANT_CWD=lib/tmux-test/ vagrant halt "$box"
+	else
+		echo
+		echo "KEEP_RUNNING is set. Vagrant not halted."
+	fi
+}
+
+run_tests() {
+	local box="$1"
+	local test_file="/vagrant/tests/run_tests_in_isolation"
+	echo "Running test suite on $box from: $test_file"
+	echo
+	VAGRANT_CWD=lib/tmux-test/ vagrant ssh "$box" -c "cd /vagrant; $test_file"
+}
+
+exit_message() {
+	local exit_val="$1"
+	echo
+	if [ "$exit_val" == 0 ]; then
+		echo "Success, tests pass!"
+	else
+		echo "Tests failed!" 1>&2
+	fi
+}
+
+run_tests_on_vm() {
+	local vm="$1"
+	run_vagrant "$vm"
+	run_tests "$vm"
+	local tests_exit_value="$?"
+	stop_vagrant "$vm"
+	if [ "$tests_exit_value" -gt 0 ]; then
+		register_failing_tests
+	fi
+}
+
+run_tests_on_virtual_machines() {
+	if [ -z "$BOXES" ]; then
+		# no script arguments, run on 'ubuntu' by default
+		run_tests_on_vm "ubuntu"
+	else
+		# run on VMs provided as script arguments
+		local box
+		for box in $BOXES; do
+			run_tests_on_vm "$box"
+		done
+	fi
+}
+
+main() {
+	echo "$BOXES"
+	run_tests_on_virtual_machines
+	exit_message "$EXIT_VALUE"
+	exit "$EXIT_VALUE"
+}
+main
