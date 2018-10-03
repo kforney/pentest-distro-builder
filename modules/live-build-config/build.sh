@@ -144,7 +144,7 @@ ver_debootstrap=$(dpkg-query -f '${Version}' -W debootstrap)
 if dpkg --compare-versions "$ver_debootstrap" lt "1.0.97"; then
 	if ! echo "$ver_debootstrap" | grep -q kali; then
 		echo "ERROR: You need debootstrap >= 1.0.97 (or a Kali patched debootstrap). Your current version: $ver_debootstrap" >&2
-		exit 1
+		#exit 1
 	fi
 fi
 
