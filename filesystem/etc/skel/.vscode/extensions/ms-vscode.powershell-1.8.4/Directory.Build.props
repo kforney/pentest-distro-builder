@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--#########################################
+  
+      Settings specific to Xbox Enginering System builds
+      Please have Xbox Engineering Services review any changes to this or related files
+      
+      This is the shim file that we insert into the PF\msbuild directory to bootstrap the build system.
+      It can also be explicitly imported (e.g by enlistment.settings or extversion.targets)
+      
+      Note that it does nothing unless there's a workspaceinfo.xml file upstream from the msbuild project directory and
+      the workspaceinfo.xml file points to a tools directory with Settings\Xes.props in it.
+      
+      Author: DougP
+ 
+  #########################################-->
+  
+    <!-- find and import WorkspaceInfo.xml -->
+  <PropertyGroup>
+    <XefWSInfoFileName>WorkspaceInfo.xml</XefWSInfoFileName>
+    <XefWSInfoDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), $(XefWSInfoFileName)))</XefWSInfoDirectory>
+    <XefWSInfoFullPath>$(XefWSInfoDirectory)\$(XefWSInfoFileName)</XefWSInfoFullPath>
+  
+    <XesCustomEarlyPropsFileName>CustomEarly.props</XesCustomEarlyPropsFileName>
+    <XesCustomEarlyPropsDir>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), $(XesCustomEarlyPropsFileName)))</XesCustomEarlyPropsDir>
+    <XesCustomEarlyPropsFullPath>$(XesCustomEarlyPropsDir)\$(XesCustomEarlyPropsFileName)</XesCustomEarlyPropsFullPath>
+  </PropertyGroup>
+  <!-- import if exists - and hasn't already been imported -->
+  <Import Project="$(XefWSInfoFullPath)" Condition="'$(XefWsInfoVersion)' == '' and Exists('$(XefWSInfoFullPath)')"/>
+  
+  <!-- Import CustomEarly.props -->
+  <Import Project="$(XesCustomEarlyPropsFullPath)" Condition="Exists('$(XesCustomEarlyPropsFullPath)')"/>
+  
+    <!-- find and import Xes.props -->
+  <Choose>
+    <!-- already imported -->
+    <When Condition="'$(XefMSPropsImported)' != ''" />
+    <!-- not in source dir (so doesn't include fakes in intermediate dir) -->
+    <When Condition="'$(XesAllowForeignProjLocation)' != 'True' and (! ($(MSBuildProjectDirectory.ToLower().StartsWith('$(XefSourceRoot.ToLower())\')) or 
+                                '$(MSBuildProjectDirectory)' == '$(XefSourceRoot)'))" />
+    <When Condition="Exists('$(XesSettings)\Xes.props')" >
+      <PropertyGroup>
+        <XefCustomInitialImportFullPath>$(XesSettings)\Xes.props</XefCustomInitialImportFullPath>
+      </PropertyGroup>
+    </When>
+    <!-- legacy conditions -->
+    <When Condition="Exists('$(XefToolRoot)\Settings\Xes.props')" >
+      <PropertyGroup>
+        <XefCustomInitialImportFullPath>$(XefToolRoot)\Settings\Xes.props</XefCustomInitialImportFullPath>
+      </PropertyGroup>
+    </When>
+    <When Condition="Exists('$(XefToolRoot)\build\Xes.props')" >
+      <PropertyGroup>
+        <XefCustomInitialImportFullPath>$(XefToolRoot)\build\Xes.props</XefCustomInitialImportFullPath>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  
+  <ImportGroup Condition="'$(XefCustomInitialImportFullPath)' != ''">
+    <Import Project="$(XefCustomInitialImportFullPath)"
+            Condition="'$(XefMSPropsImported)' == '' and Exists('$(XefCustomInitialImportFullPath)')"/>
+  </ImportGroup>
+</Project>

@@ -1,0 +1,89 @@
+{
+	"name": "vscode-html-css",
+	"displayName": "HTML CSS Support",
+	"description": "CSS support for HTML documents",
+	"version": "0.2.0",
+	"publisher": "ecmel",
+	"license": "MIT",
+	"homepage": "https://github.com/ecmel/vscode-html-css",
+	"bugs": "https://github.com/ecmel/vscode-html-css/issues",
+	"icon": "icon.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ecmel/vscode-html-css.git"
+	},
+	"engines": {
+		"vscode": "^1.19.0"
+	},
+	"contributes": {
+		"configuration": {
+			"title": "CSS Settings",
+			"properties": {
+				"css.remoteStyleSheets": {
+					"type": "array",
+					"default": [],
+					"description": "A list of remote style sheets."
+				},
+				"css.fileExtensions": {
+					"type": "array",
+					"default": [
+						"css",
+						"scss"
+					],
+					"description": "A list of style sheet file extensions you want the extension to look for."
+				}
+			}
+		}
+	},
+	"categories": [
+		"Languages",
+		"Other"
+	],
+	"keywords": [
+		"html",
+		"css",
+		"class",
+		"id",
+		"multi-root ready"
+	],
+	"activationEvents": [
+		"onLanguage:html",
+		"onLanguage:laravel-blade",
+		"onLanguage:razor",
+		"onLanguage:vue",
+		"onLanguage:blade",
+		"onLanguage:pug",
+		"onLanguage:jade",
+		"onLanguage:handlebars",
+		"onLanguage:php",
+		"onLanguage:twig",
+		"onLanguage:md",
+		"onLanguage:nunjucks",
+		"onLanguage:javascript",
+		"onLanguage:javascriptreact"
+	],
+	"main": "./out/src/extension",
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"typescript": "^2.6.1",
+		"vscode": "^1.1.6",
+		"@types/node": "^7.0.43",
+		"@types/mocha": "^2.2.42"
+	},
+	"dependencies": {
+		"request": "^2.81.0",
+		"vscode-css-languageservice": "^3.0.3",
+		"vscode-languageserver-types": "^3.5.0"
+	},
+	"__metadata": {
+		"id": "aaee577c-f062-495a-9816-0cbd442f1d25",
+		"publisherId": "7aa35068-d7c4-4220-b9c1-10360795fd5f",
+		"publisherDisplayName": "ecmel"
+	}
+}
