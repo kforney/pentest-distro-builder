@@ -4,6 +4,10 @@ set -e
 set -o pipefail # Bashism
 
 parrot_mirror=http://archive.parrotsec.org/parrot
+public_mirror=http://archive.parrotsec.org/parrot
+
+#public_mirror=http://deb.parrotsec.org/parrot
+
 
 # Detect target architecture and filter args
 if [ ! $arch ]; then
@@ -107,7 +111,7 @@ lb config noauto \
 	--mirror-bootstrap "$parrot_mirror" \
 	--mirror-chroot "$parrot_mirror" \
 	--mirror-debian-installer "$parrot_mirror" \
-	--mirror-binary "$parrot_mirror" \
+	--mirror-binary "$public_mirror" \
 	--iso-application "Parrot" \
 	--iso-publisher "Parrot Project" \
 	--iso-volume "ParrotSec" \
