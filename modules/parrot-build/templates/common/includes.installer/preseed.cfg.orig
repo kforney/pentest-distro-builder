@@ -1,11 +1,3 @@
-d-i debian-installer/locale string en_US.UTF-8
-d-i console-keymaps-at/keymap select us
-d-i mirror/country string enter information manually
-d-i keyboard-configuration/xkb-keymap select us
-
-d-i clock-setup/utc boolean true
-d-i time/zone string US/Mountain
-
 # Disable volatile and security
 d-i apt-setup/services-select multiselect
 
@@ -38,19 +30,6 @@ d-i apt-setup/use_mirror boolean false
 # Disable CDROM entries after install
 d-i apt-setup/disable-cdrom-entries boolean true
 
-# Partitioning
-d-i partman-auto/method string regular
-d-i partman-lvm/device_remove_lvm boolean true
-d-i partman-md/device_remove_md boolean true
-d-i partman-lvm/confirm boolean true
-d-i partman-auto/choose_recipe select atomic
-d-i partman-auto/disk string /dev/sda
-d-i partman/confirm_write_new_label boolean true
-d-i partman/choose_partition select finish
-d-i partman/confirm boolean true
-d-i partman/confirm_nooverwrite boolean true
-d-i partman-partitioning/confirm_write_new_label boolean true
-
 # Packages
 #d-i pkgsel/upgrade select full-upgrade
 # install Parrot Security
@@ -63,11 +42,9 @@ d-i netcfg/get_hostname string parrot
 # d-i netcfg/get_hostname seen false
 
 # user creation
-d-i passwd/root-login boolean true
-d-i passwd/make-user boolean false
-d-i passwd/root-password password toor
-d-i passwd/root-password-again password toor
-#d-i passwd/user-default-groups string audio cdrom dip floppy video plugdev netdev powerdev scanner bluetooth debian-tor sudo libvirt fuse dialout
+d-i passwd/root-login boolean false
+d-i passwd/make-user boolean true
+d-i passwd/user-default-groups string audio cdrom dip floppy video plugdev netdev powerdev scanner bluetooth debian-tor sudo libvirt fuse dialout
 
 # Use the following option to add additional boot parameters for the
 # installed system (if supported by the bootloader installer).
@@ -86,10 +63,7 @@ d-i anna/choose_modules seen false
 # When disk encryption is enabled, skip wiping the partitions beforehand.
 d-i partman-auto-crypto/erase_disks boolean false
 
-d-i grub-installer/only_debian boolean true
-d-i grub-installer/with_other_os boolean false
-d-i grub-installer/bootdev string /dev/sda
-d-i finish-install/reboot_in_progress note
+
 
 # Skip the exit timeout
 #d-i di-utils-reboot/really_reboot boolean false
