@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=guake
+Hidden=false
+X-MATE-Autostart-enabled=true
+Name[en_US]=Guake Terminal
+Name=Guake Terminal
+Comment[en_US]=
+Comment=
